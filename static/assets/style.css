@@ -1,0 +1,126 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    outline: none;
+}
+:root{
+    /* --text: #f4f2f1;
+    --background: #130e0b;
+    --primary: #d3aa95;
+    --secondary: #783f22;
+    --accent: #db6325; */
+    --text: #e8e7ed;
+    --background: #08070c;
+    --primary: #a59acf;
+    --secondary: #3d2d7c;
+    --accent: #5b3fcb;
+    --static: rgba(255, 255, 255, 0.03);
+    --static2: rgba(255, 255, 255, 0.08);
+    --static3: rgba(255, 255, 255, 0.1);
+}
+body{
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0 10%;
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+input{
+    background: none;
+    border: 1px solid var(--static2);
+    padding: 12px 15px;
+    border-radius: 7px;
+    transition: 0.2s;
+    color: inherit;
+}
+input:focus{
+    border-color: var(--secondary);
+}
+button{
+    background: var(--secondary);
+    border: none;
+    color: var(--text);
+    padding: 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover{
+    background: var(--accent);
+    /* color: var(--background); */
+}
+
+a{
+    color: var(--primary);
+    text-decoration: none;
+}
+hr{border-color: var(--secondary);opacity: 0.4;}
+p{
+    opacity: 0.9;
+}
+.grid-bg{
+    background-image: 
+        linear-gradient(to right, #cccccc0d 1px, transparent 1px),
+        linear-gradient(to bottom, #cccccc0d 1px, transparent 1px);
+    background-size: 100px 100px;
+}
+/*  */
+.auth-form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* background: var(--static); */
+    background: var(--background);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--static3);
+    min-width: 30%;
+}
+.auth-form h2,.auth-form p{
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.auth-form #password-container{
+    position: relative;
+}
+.auth-form #password-container input{
+    width: 100%;
+}
+.auth-form #password-container span{
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-100%,-50%);
+    padding: 15px;
+    opacity: 0.6;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.auth-form #password-container span:hover{
+    opacity: 0.8;
+}
+
+.auth-form .errors-container{
+    width: 100%;
+    background: rgba(206, 13, 13, 0.1);
+    color: #ff0000cc;
+    border: 1px solid #dc181851;
+    padding: 10px 25px;
+    border-radius: 7px;
+}
+.auth-form .errors-container ul{
+    /* list-style: none; */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} - Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/boxicons/boxicons.min.css') }}">
+</head>
+<body class="grid-bg">
+    <form action="/signup" method="post" class="auth-form">
+        <h2>Welcome to {{app_name}}👋</h2>
+        <p>Create an account</p>
+        {% if errors %}
+            <div class="errors-container">
+                <ul>
+                        {% for error in errors %}
+                            <li>
+                                    {{error}}
+                            </li>
+                        {% endfor %}
+                </ul>
+            </div>
+        {%endif%}
+        <input type="text" placeholder="Enter your name" name="name">
+        <input type="email" placeholder="Enter your email" name="email">
+        <div id="password-container">
+            <input type="password" placeholder="Enter your password" name="password">
+            <span><i class='bx bx-eye'></i> </span>
+        </div>
+        <button>Signup</button>
+        <hr style="margin: 7px 0;">
+        <div style="text-align: center;">
+            Already have account? <a href="#">Login</a>
+        </div>
+    </form>
+
+    <script src="{{ url_for('static', filename='assets/script.js') }}"></script>
+</body>
+</html>
