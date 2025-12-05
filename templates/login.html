@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ app_name }} - Signup</title>
+    <title>{{ app_name }} - Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/boxicons/boxicons.min.css') }}">
 </head>
 <body class="grid-bg">
-    <form action="/signup" method="post" class="auth-form">
+    <form action="/login" method="post" class="auth-form">
         <h2>Welcome to {{app_name}}👋</h2>
-        <p>Create an account</p>
+        <p>Login To your account</p>
         {% if errors %}
             <div class="errors-container">
                 <ul>
@@ -22,16 +22,15 @@
                 </ul>
             </div>
         {%endif%}
-        <input type="text" placeholder="Enter your name" name="name">
         <input type="email" placeholder="Enter your email" name="email">
         <div id="password-container">
             <input type="password" placeholder="Enter your password" name="password">
             <span><i class='bx bx-eye'></i> </span>
         </div>
-        <button>Signup</button>
+        <button>Login</button>
         <hr style="margin: 7px 0;">
         <div style="text-align: center;">
-            Already have account? <a href="/login">Login</a>
+            Didn't have an account? <a href="/signup">Signup</a>
         </div>
     </form>
 

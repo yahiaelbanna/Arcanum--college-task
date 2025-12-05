@@ -1,18 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-import bcrypt
+import hashlib
 import re
 
 app = Flask(__name__)
 
 # PASSWORD HASHING
 def hash_password(password):
-    password_bytes = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password_bytes, salt)
-    return hashed_password
-
-# conn = sqlite3.connect('D:\\2025 programming\\flask project\\simplecrud.db')
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 #Database_setup
 def init_db():
@@ -20,7 +15,7 @@ def init_db():
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
-            id INTGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR(100) NOT NULL,
             email VARCHAR(100) UNIQUE,
             password VARCHAR(200) NOT NULL
@@ -40,11 +35,25 @@ def get_users():
 
 def get_user_with_email(email):
     conn = sqlite3.connect('crud.db')
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users where email = ?',(email,))
-    user = cursor.fetchone()
+    row = cursor.fetchone()
     conn.close()
-    return user
+    if row is None:
+        return None
+    return dict(row)
+
+def get_user(id):
+    conn = sqlite3.connect('crud.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users where id = ?',(id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row is None:
+        return None
+    return dict(row)
 
 # Create_account_method
 def signup(data):
@@ -82,22 +91,62 @@ def signupRequest():
             errors.append('Email is required')
         if not data.get('password') or not data['password'].strip():
             errors.append('Password is required')
-
-        if get_user_with_email(data['email']) is not None:
-            errors.append('This email is already taken')
         
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', data['email']):
             errors.append('Invalid email format')
-
+            
+        if get_user_with_email(data['email']) is not None:
+            errors.append('This email is already taken')
+        
         if errors:
             return render_template('signup.html', errors=errors)
         
         return signup(data)
         # return redirect(url_for('index'))
 
+# LOGIN PAGE FRONT
+@app.route('/login')
+def loginPage():
+        return render_template('login.html')
+
+# LOGIN REQUEST
+@app.route('/login', methods=['POST'])
+def loginRequest():
+    if request.method == 'POST':
+        data = request.form
+        errors = []
+        
+        if data['email'] == '':
+            errors.append('Email is required')
+        if data['password'] == '':
+            errors.append('Password is required')
+
+        if data['email'] != '' and not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', data['email']):
+            errors.append('Invalid email format')
+
+        user = get_user_with_email(data['email'])
+        if data['email'] != '' and user is None:
+            errors.append('Wrong email')
+
+        if data['password'] != '' and user is not None and user['password'] != hash_password(data['password']):
+            errors.append('Wrong password')
+
+        if errors:
+            return render_template('login.html', errors=errors)
+
+        response = redirect(url_for('index'))
+        response.set_cookie('user_id', str(user['id']))
+        return response
+
 @app.route('/')
 def index():
-    return 'hello'
+    user_id = request.cookies.get('user_id')
+    if not user_id:
+        return redirect(url_for('loginPage'))
+        
+    user = get_user(user_id)
+    # return 'hello ' + user['name']
+    return render_template('index.html', user=user)
 
 
 
