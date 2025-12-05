@@ -5,6 +5,12 @@ import re
 
 app = Flask(__name__)
 
+
+# CREATE CONTEXT FOR APP NAME
+@app.context_processor
+def inject_app_name():
+    return dict(app_name="Arcanum")
+
 # PASSWORD HASHING
 def hash_password(password):
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
@@ -33,6 +39,7 @@ def get_users():
     conn.close()
     return users
 
+# CHECK IF THE USER EMAIL EXIST METHOD
 def get_user_with_email(email):
     conn = sqlite3.connect('crud.db')
     conn.row_factory = sqlite3.Row
@@ -44,6 +51,7 @@ def get_user_with_email(email):
         return None
     return dict(row)
 
+# GET THE USER INFO BASED ON HIS ID
 def get_user(id):
     conn = sqlite3.connect('crud.db')
     conn.row_factory = sqlite3.Row
@@ -55,6 +63,13 @@ def get_user(id):
         return None
     return dict(row)
 
+'''
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::SIGNUP METHODS::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+'''
 # Create_account_method
 def signup(data):
     conn = sqlite3.connect('crud.db', timeout=10)
@@ -67,11 +82,6 @@ def signup(data):
     response = redirect(url_for('index'))
     response.set_cookie('user_id', str(user_id))
     return response
-
-# CREATE CONTEXT FOR APP NAME
-@app.context_processor
-def inject_app_name():
-    return dict(app_name="Arcanum")
 
 # SIGNUP PAGE FRONT
 @app.route('/signup')
@@ -103,6 +113,14 @@ def signupRequest():
         
         return signup(data)
         # return redirect(url_for('index'))
+
+'''
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::LOGIN METHODS::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+'''
 
 # LOGIN PAGE FRONT
 @app.route('/login')
@@ -138,12 +156,20 @@ def loginRequest():
         response.set_cookie('user_id', str(user['id']))
         return response
 
+'''
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::INDEX PAGE::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+'''
+
 @app.route('/')
 def index():
     user_id = request.cookies.get('user_id')
     if not user_id:
         return redirect(url_for('loginPage'))
-        
+
     user = get_user(user_id)
     # return 'hello ' + user['name']
     return render_template('index.html', user=user)
