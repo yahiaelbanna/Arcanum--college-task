@@ -7,8 +7,6 @@ A clean Flask-based authentication system built as a college project with modern
 ### Requirements
 - Python 3.7+
 - Flask
-- sqlite3
-- hashlib
 
 ### Setup Steps
 1. **Download the project files**
@@ -37,7 +35,7 @@ arcanum-app/
 │   └── signup.html     # Signup Page
 └── README.md
 ```
-📸 Application Screenshots
+## 📸 Application Screenshots
 1. Login Page
 <img src="https://github.com/yahiaelbanna/Arcanum--college-task/blob/main/md/login.png" alt="login page">
 Modern login interface with password toggle and validation
