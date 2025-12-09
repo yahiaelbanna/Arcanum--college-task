@@ -1,14 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ app_name }} - Home page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/boxicons/boxicons.min.css') }}">
-</head>
-<body class="grid-bg">
-    <h1>Hello, {{user['name']}} 👋</h1>
-    <script src="{{ url_for('static', filename='assets/script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+  <h2 style="margin-bottom: 10px;">Welcome, {{user['name']}} 👋</h2>
+  <p style="opacity: 0.8;">This is the unique content for the home page.</p>
+  <div class="posts-container">
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post">
+                <span class="date">{{post[4]}}</span>
+                <h2>{{post[1]}}</h2>
+                <p>
+                    {{post[2][:150]}}
+                </p>
+                <a href="">Read more <i class='bx  bx-arrow-right-stroke'></i> </a>
+            </div>
+        {% endfor %}
+    {%endif%}
+  </div>
+{% endblock %}

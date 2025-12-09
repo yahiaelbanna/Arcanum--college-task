@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Add Blog{% endblock %}
+{% block content %}
+  <h2 style="margin-bottom: 10px;">Let's write it, {{user['name']}} 🔥</h2>
+  <div class="posts-container">
+    <form class="auth-form" style="margin: 20px 0;" method="post" action="{{url_for('storeBlog')}}">
+      {% if errors %}
+          <div class="errors-container">
+              <ul>
+                      {% for error in errors %}
+                          <li>
+                                  {{error}}
+                          </li>
+                      {% endfor %}
+              </ul>
+          </div>
+      {%endif%}
+      <h4 style="opacity: 0.9;">Write your post</h4>
+      <input type="text" placeholder="Post Title" name="title">
+      <textarea name="post" placeholder="Post Content"></textarea>
+      <button>Create post</button>
+    </form>
+  </div>
+{% endblock %}
