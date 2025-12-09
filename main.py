@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import hashlib
 import re
+from datetime import date
 
 app = Flask(__name__)
 
@@ -17,7 +18,7 @@ def hash_password(password):
 
 #Database_setup
 def init_db():
-    conn = sqlite3.connect('crud.db')
+    conn = sqlite3.connect('arcanum.db')
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -27,12 +28,21 @@ def init_db():
             password VARCHAR(200) NOT NULL
         )
     ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title VARCHAR(100) NOT NULL,
+            post TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
+            date DATE NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()
 
 # Show_all_users
 def get_users():
-    conn = sqlite3.connect('crud.db')
+    conn = sqlite3.connect('arcanum.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users')
     users = cursor.fetchall()
@@ -41,7 +51,7 @@ def get_users():
 
 # CHECK IF THE USER EMAIL EXIST METHOD
 def get_user_with_email(email):
-    conn = sqlite3.connect('crud.db')
+    conn = sqlite3.connect('arcanum.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users where email = ?',(email,))
@@ -53,7 +63,7 @@ def get_user_with_email(email):
 
 # GET THE USER INFO BASED ON HIS ID
 def get_user(id):
-    conn = sqlite3.connect('crud.db')
+    conn = sqlite3.connect('arcanum.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users where id = ?',(id,))
@@ -62,6 +72,14 @@ def get_user(id):
     if row is None:
         return None
     return dict(row)
+
+def get_posts():
+    conn = sqlite3.connect('arcanum.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM posts')
+    posts = cursor.fetchall()
+    # conn.close()
+    return posts
 
 '''
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -72,7 +90,7 @@ def get_user(id):
 '''
 # Create_account_method
 def signup(data):
-    conn = sqlite3.connect('crud.db', timeout=10)
+    conn = sqlite3.connect('arcanum.db', timeout=10)
     cursor = conn.cursor()
     cursor.execute('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', (data['name'], data['email'], hash_password(data['password'])))
     conn.commit()
@@ -169,11 +187,48 @@ def index():
     user_id = request.cookies.get('user_id')
     if not user_id:
         return redirect(url_for('loginPage'))
-
     user = get_user(user_id)
-    # return 'hello ' + user['name']
-    return render_template('index.html', user=user)
+    posts = get_posts()
+    print(posts)
+    return render_template('index.html', user=user,posts=posts)
 
+@app.route('/add')
+def addBlog():
+    user_id = request.cookies.get('user_id')
+    if not user_id:
+        return redirect(url_for('loginPage'))
+    user = get_user(user_id)
+    return render_template('add.html', user=user)
+
+
+@app.route('/create-blog', methods=['POST'])
+def storeBlog():
+    if request.method == 'POST':
+        user_id = request.cookies.get('user_id')
+        if not user_id:
+            return redirect(url_for('loginPage'))
+        user = get_user(user_id)
+
+        data = request.form
+        errors = []
+
+        if data['title'] == '':
+            errors.append('Title is required')
+        if data['post'] == '':
+            errors.append('Post is required')
+
+        if errors:
+            return render_template('add.html', errors=errors,user=user)
+
+        today = date.today()
+
+        conn = sqlite3.connect('arcanum.db', timeout=10)
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO posts (title, post, user_id, date) VALUES (?, ?, ?, ?)', (data['title'], data['post'], user_id, today))
+        conn.commit()
+        conn.close()
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
