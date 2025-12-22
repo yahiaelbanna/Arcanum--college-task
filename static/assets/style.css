@@ -5,16 +5,16 @@
     outline: none;
 }
 :root{
-    --text: #f4f2f1;
+    /* --text: #f4f2f1;
     --background: #130e0b;
     --primary: #d3aa95;
     --secondary: #783f22;
-    --accent: #db6325;
-    /* --text: #e8e7ed;
+    --accent: #db6325; */
+    --text: #e8e7ed;
     --background: #08070c;
     --primary: #a59acf;
     --secondary: #3d2d7c;
-    --accent: #6b47fa; */
+    --accent: #5b3fcb;
     --static: rgba(255, 255, 255, 0.03);
     --static2: rgba(255, 255, 255, 0.08);
     --static3: rgba(255, 255, 255, 0.1);
@@ -29,7 +29,7 @@ body{
     color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
 }
-input,textarea{
+input{
     background: none;
     border: 1px solid var(--static2);
     padding: 12px 15px;
@@ -37,13 +37,8 @@ input,textarea{
     transition: 0.2s;
     color: inherit;
 }
-input:focus, textarea:focus{
+input:focus{
     border-color: var(--secondary);
-}
-textarea{
-    resize: vertical;
-    height: 170px;
-    padding: 15px;
 }
 button{
     background: var(--secondary);
@@ -147,7 +142,6 @@ footer{
 }
 footer a{
     margin: 0 10px;
-    color: var(--accent);
 }
 
 nav{
@@ -199,47 +193,4 @@ nav .profile a{
     color: var(--text);
     font-size: 17px;
     opacity: 0.7;
-}
-
-/*  */
-
-.posts-container{
-    margin: 25px 0;
-    border-top: 1px solid var(--static3);
-}
-.posts-container .post{
-    padding: 20px;
-    border: 1px solid var(--static3);
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: var(--background);
-    margin: 20px 0;
-}
-.posts-container .post .date{
-    border: 1px solid var(--accent);
-    width: fit-content;
-    padding: 10px 20px;
-    border-radius: 50px;
-    background: #db622573;
-    /* color: var(--accent); */
-    color: var(--text);
-    transform: scale(0.8) translateX(-10%);
-    opacity: 0.8;
-}
-.posts-container .post p{
-    opacity: 0.7;
-}
-.posts-container .post a{
-    display: flex;
-    align-items: center;
-    color: var(--accent);
-    text-shadow: 0 0 5px -2px var(--accent);
-    opacity: 0.9;
-    transition: 0.3s;
-}
-.posts-container .post a:hover{
-    opacity: 1;
-    transform: translateX(5px);
 }

@@ -6,7 +6,6 @@
     <title>{{ app_name }} - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/boxicons/boxicons.min.css') }}">
-    <link rel="shortcut icon" href="{{url_for('static', filename='images/logo.png')}}" type="image/x-icon">
 </head>
 <body class="grid-bg">
     <nav>
@@ -16,16 +15,16 @@
         <div class="links-container">
             <ul>
                 <li>
-                    <a href="{{url_for('index')}}">Blogs</a>
+                    <a href="">Home</a>
                 </li>
                 <li>
-                    <a href="{{url_for('addBlog')}}">Add Blog</a>
+                    <a href="">Blogs</a>
                 </li>
             </ul>
         </div>
-        <!-- <div class="profile">
+        <div class="profile">
             <a href=""><i class="bx bx-user"></i></a>
-        </div> -->
+        </div>
     </nav>
     <main>
         {% block content %}
